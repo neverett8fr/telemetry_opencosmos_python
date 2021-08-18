@@ -1,11 +1,11 @@
-import socket, time, datetime
+import socket, time, datetime, matplotlib
 
 
 def write_data(data_array, file_name):
 	file = open(file_name + "values.csv", "a")
 
 	for i, data in enumerate(data_array):
-		file.write(str(datetime.datetime.fromtimestamp(int(data[0])))+","+data[1]+","+data[2]+"\n")
+		file.write(data[0]+","+data[1]+","+data[2]+"\n")
 
 	file.close()
 
@@ -26,9 +26,43 @@ def get_data(seconds):
 	output = []
 	for i, value in enumerate(data):
 		if len(value.split(':')) == 3:
-			output.append(value.split(':'))
+			temp = value.split(':')
+			temp[0] = str(datetime.datetime.fromtimestamp(int(temp[0])))
+			output.append(temp)
 
 	return output
 
 
-write_data(get_data(5), "data")
+def read_data(file_path):
+	file = open(file_path, "r")
+	data = file.readlines()
+
+	x_values = []
+	y_values = []
+
+	for i, value in enumerate(data):
+		values_split = value.split(',')
+		x_values.append(values_split[2].replace("\n", ""))
+		y_values.append(time.mktime(datetime.datetime.strptime(values_split[0], "%Y-%m-%d %H:%M:%S").timetuple()))
+
+	print(x_values)
+	print(y_values)
+
+def create_graph(file_path):
+	read_data(file_path)
+	print()
+
+
+choice = int(input("Hello! Please choose one of the following options\n    Get Telemetry Data(0), Get and Write to File (1), Read data from file (2): "))
+if choice == 0:
+	seconds = int(input("Choose for how many seconds to read:  "))
+	print(get_data(seconds))
+elif choice == 1:
+	seconds = int(input("Choose for how many seconds to read:  "))
+	file_name = input("Choose a name for the file:  ")
+	data = get_data(seconds)
+	print(data)
+	write_data(data, file_name)
+elif choice == 2:
+	file_path = input("Enter the filepath / name:  ")
+	create_graph(file_path)
