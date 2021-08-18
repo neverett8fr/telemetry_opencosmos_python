@@ -1,4 +1,5 @@
-import socket, time, datetime, matplotlib
+import socket, time, datetime
+import matplotlib.pyplot as plt
 
 
 def write_data(data_array, file_name):
@@ -45,12 +46,17 @@ def read_data(file_path):
 		x_values.append(values_split[2].replace("\n", ""))
 		y_values.append(time.mktime(datetime.datetime.strptime(values_split[0], "%Y-%m-%d %H:%M:%S").timetuple()))
 
-	print(x_values)
-	print(y_values)
+	return x_values, y_values
 
 def create_graph(file_path):
-	read_data(file_path)
-	print()
+	x_values, y_values = read_data(file_path)
+	plt.xlabel("Time")
+	plt.ylabel("Values")
+	plt.title("Telemetry Data")
+
+	plt.plot(x_values, y_values)
+
+	plt.show()
 
 
 choice = int(input("Hello! Please choose one of the following options\n    Get Telemetry Data(0), Get and Write to File (1), Read data from file (2): "))
