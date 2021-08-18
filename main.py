@@ -50,8 +50,6 @@ def read_data(file_path):
 
 def create_graph(file_path):
 	x_values, y_values = read_data(file_path)
-	print(x_values)
-	print(y_values)
 
 	plt.xlabel("Unix Time")
 	plt.ylabel("Values")
