@@ -43,14 +43,17 @@ def read_data(file_path):
 
 	for i, value in enumerate(data):
 		values_split = value.split(',')
-		x_values.append(values_split[2].replace("\n", ""))
-		y_values.append(time.mktime(datetime.datetime.strptime(values_split[0], "%Y-%m-%d %H:%M:%S").timetuple()))
+		y_values.append(float(values_split[2].replace("\n", "")))
+		x_values.append(time.mktime(datetime.datetime.strptime(values_split[0], "%Y-%m-%d %H:%M:%S").timetuple()))
 
 	return x_values, y_values
 
 def create_graph(file_path):
 	x_values, y_values = read_data(file_path)
-	plt.xlabel("Time")
+	print(x_values)
+	print(y_values)
+
+	plt.xlabel("Unix Time")
 	plt.ylabel("Values")
 	plt.title("Telemetry Data")
 
